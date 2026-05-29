@@ -4,16 +4,23 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Play, X, Shield, Truck, Star, ChevronDown, Zap } from "lucide-react";
-import dynamic from "next/dynamic";
-
-const HeroScene = dynamic(() => import("@/components/3d/HeroScene"), {
-  ssr: false,
-  loading: () => null,
-});
+import MagneticButton from "@/components/ui/MagneticButton";
+import LazyHeroScene from "@/components/3d/LazyHeroScene";
 
 export function HeroSection() {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [render3D, setRender3D] = useState(true);
+
+  useEffect(() => {
+    const check = () => {
+      const isTouch = typeof window !== "undefined" && ("ontouchstart" in window || navigator.maxTouchPoints > 0);
+      setRender3D(typeof window !== "undefined" && window.innerWidth >= 768 && !isTouch);
+    };
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   return (
     <>
@@ -22,40 +29,27 @@ export function HeroSection() {
         <div className="absolute inset-0 neural-grid opacity-30" />
 
         {/* Ambient Gradient Lighting */}
-        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full opacity-20 blur-3xl pointer-events-none bg-gradient-radial from-blue-500/40 to-transparent" />
-        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full opacity-15 blur-3xl pointer-events-none bg-gradient-radial from-violet-500/40 to-transparent" />
-        <div className="absolute top-1/2 right-1/3 w-[300px] h-[300px] rounded-full opacity-10 blur-2xl pointer-events-none bg-gradient-radial from-cyan-500/30 to-transparent" />
+          <div className="absolute top-1/4 left-1/4 w-[420px] h-[420px] rounded-full opacity-12 blur-3xl pointer-events-none bg-gradient-radial from-blue-500/30 to-transparent" />
+          <div className="absolute bottom-1/4 right-1/4 w-[360px] h-[360px] rounded-full opacity-10 blur-3xl pointer-events-none bg-gradient-radial from-violet-500/28 to-transparent" />
 
-        {/* 3D Interactive Scene */}
-        <HeroScene />
+        {/* 3D Interactive Scene (desktop only) */}
+        {render3D ? <LazyHeroScene /> : (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+            <div className="w-full max-w-3xl h-80 rounded-3xl glass border border-white/6 overflow-hidden flex items-center justify-center relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-black/60 to-violet-900/30" />
+              <div className="relative z-10 text-center px-6">
+                <div className="mx-auto w-36 h-72 rounded-2xl bg-gradient-to-tr from-blue-800 to-violet-700 shadow-[0_40px_120px_rgba(124,58,237,0.22)]" />
+                <p className="text-gray-300 mt-4">Experience the floating showroom — rotate products on desktop</p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Floating Particles Overlay */}
-        <div className="absolute inset-0 pointer-events-none z-1 overflow-hidden">
-          {[...Array(20)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 bg-white/20 rounded-full"
-              style={{
-                top: `${Math.random() * 100}%`,
-                left: `${Math.random() * 100}%`,
-              }}
-              animate={{
-                y: [0, -40, 0],
-                opacity: [0.1, 0.6, 0.1],
-                scale: [1, 1.5, 1],
-              }}
-              transition={{
-                duration: 5 + Math.random() * 5,
-                repeat: Infinity,
-                delay: Math.random() * 5,
-                ease: "easeInOut",
-              }}
-            />
-          ))}
-        </div>
+          {/* Removed Floating Particles for a calmer background */}
 
         {/* Content */}
-        <div className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-center mt-6">
+        <div className="relative z-10 container px-4 sm:px-6 lg:px-8 text-center mt-6">
           {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -98,22 +92,17 @@ export function HeroSection() {
             transition={{ delay: 0.65 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
           >
-            <Link
-              href="/products"
-              id="hero-shop-btn"
-              className="group btn-premium-primary px-8 py-4 text-lg gap-2 cursor-pointer w-full sm:w-auto"
-            >
-              Explore Collection
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Link>
-            <button
-              onClick={() => setIsVideoOpen(true)}
-              id="hero-watch-btn"
-              className="group btn-premium-secondary px-8 py-4 text-lg gap-2 cursor-pointer w-full sm:w-auto flex items-center justify-center"
-            >
+            <MagneticButton href="/products" id="hero-shop-btn" className="group btn-premium-primary px-8 py-4 text-lg gap-2 cursor-pointer w-full sm:w-auto" data-cursor="interactive">
+              <span className="flex items-center gap-3">
+                Explore Collection
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </span>
+            </MagneticButton>
+
+            <MagneticButton className="group btn-premium-secondary px-8 py-4 text-lg gap-2 cursor-pointer w-full sm:w-auto flex items-center justify-center" onClick={() => setIsVideoOpen(true)} data-cursor="interactive">
               <Play className="w-4 h-4 text-blue-400 group-hover:scale-110 transition-transform" />
-              Watch Experience
-            </button>
+              <span className="ml-2">Watch Experience</span>
+            </MagneticButton>
           </motion.div>
 
           {/* Trust Badges */}

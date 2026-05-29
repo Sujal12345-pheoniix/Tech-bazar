@@ -240,7 +240,7 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
         </div>
 
         {/* Content - Separated into its own block-level Link */}
-        <Link href={`/products/${product.slug}`} className="block p-4">
+        <Link href={`/products/${product.slug}`} className="block p-6">
           {product.brand && (
             <p className="text-xs text-blue-400 font-medium mb-1 uppercase tracking-wide">{product.brand}</p>
           )}

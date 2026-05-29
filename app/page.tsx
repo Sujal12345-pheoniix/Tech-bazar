@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { HeroSection } from "@/components/home/HeroSection";
-import { CategorySection } from "@/components/home/CategorySection";
+import Showcase from "@/components/home/Showcase";
+import CategoryExperience from "@/components/home/CategoryExperience";
 import { StatsSection } from "@/components/home/StatsSection";
 import { BrandMarquee } from "@/components/home/BrandMarquee";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
@@ -28,6 +29,9 @@ export default async function HomePage() {
       {/* Hero */}
       <HeroSection />
 
+      {/* Curated Showcase */}
+      <Showcase />
+
       {/* Stats */}
       <StatsSection />
 
@@ -37,7 +41,7 @@ export default async function HomePage() {
       {/* Trending Products */}
       {trendingProducts.length > 0 && (
         <section className="py-24 relative">
-          <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="container px-4 sm:px-6 lg:px-8">
             <div className="flex items-end justify-between mb-12">
               <div>
                 <p className="text-orange-400 text-sm font-semibold uppercase tracking-widest mb-2">🔥 Hot Right Now</p>
@@ -55,11 +59,11 @@ export default async function HomePage() {
       )}
 
       {/* Categories */}
-      <CategorySection />
+      <CategoryExperience />
 
       {/* Featured Collections Banner */}
       <section className="py-16">
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="container px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               {
@@ -114,7 +118,7 @@ export default async function HomePage() {
       {/* Featured Products */}
       {featuredProducts.length > 0 && (
         <section className="py-24 relative">
-          <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="container px-4 sm:px-6 lg:px-8">
             <div className="flex items-end justify-between mb-12">
               <div>
                 <p className="text-blue-400 text-sm font-semibold uppercase tracking-widest mb-2">⭐ Editor&apos;s Pick</p>
@@ -133,7 +137,7 @@ export default async function HomePage() {
 
       {/* Why Choose Us */}
       <section className="py-24 border-t border-white/5">
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="container px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl sm:text-5xl font-display font-bold text-white mb-4">
               Why <span className="gradient-text">TECH-BAAZAR?</span>

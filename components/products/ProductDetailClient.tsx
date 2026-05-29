@@ -9,6 +9,8 @@ import { formatPrice, calculateDiscount } from "@/lib/utils";
 import { toast } from "sonner";
 import Link from "next/link";
 import ProductCard from "@/components/products/ProductCard";
+import LazyProductViewer from "@/components/products/LazyProductViewer";
+import StickyBuyBar from "@/components/ui/StickyBuyBar";
 import {
   ShoppingCart, Heart, Star, Shield, Truck, RotateCcw,
   ChevronLeft, ChevronRight, ZoomIn, Share2, Check,
@@ -102,7 +104,7 @@ export default function ProductDetailClient({
 
   return (
     <div className="min-h-screen bg-dark-base">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="container px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 text-sm text-gray-400 mb-8">
           <Link href="/" className="hover:text-white transition-colors">Home</Link>
@@ -115,43 +117,38 @@ export default function ProductDetailClient({
         </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-          {/* Image Gallery */}
+          {/* Image Gallery / 360 Preview */}
           <div className="space-y-4">
-            {/* Main Image */}
-            <div
-              className="relative aspect-square bg-white/3 rounded-3xl overflow-hidden glass border border-white/8 cursor-zoom-in"
-              onClick={() => setIsZoomed(!isZoomed)}
-            >
-              <AnimatePresence mode="wait">
-                <motion.img
-                  key={selectedImage}
-                  src={product.images[selectedImage]?.url ?? "/placeholder.jpg"}
-                  alt={product.images[selectedImage]?.altText ?? product.name}
-                  className="w-full h-full object-cover"
-                  initial={{ opacity: 0, scale: 1.05 }}
-                  animate={{ opacity: 1, scale: isZoomed ? 1.3 : 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                />
-              </AnimatePresence>
-
-              {/* Zoom icon */}
-              <div className="absolute top-4 right-4 w-9 h-9 glass rounded-xl flex items-center justify-center">
-                <ZoomIn className="w-4 h-4 text-gray-400" />
+            <div className="relative">
+              <div className="pointer-events-auto">
+                {/* 3D Viewer (lazy loads when visible) */}
+                <div className="h-[560px]">
+                  <LazyProductViewer images={product.images.map((i) => i.url)} selected={selectedImage} onSwipe={(dir) => {
+                    const len = product.images.length;
+                    if (dir === "left") setSelectedImage((p) => (p + 1) % len);
+                    else setSelectedImage((p) => (p - 1 + len) % len);
+                  }} />
+                </div>
               </div>
 
-              {/* Prev/Next */}
+              {/* Badges */}
+              <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
+                {discount > 0 && <span className="px-3 py-1 bg-red-500 text-white text-sm font-bold rounded-full">-{discount}%</span>}
+                {product.isNewArrival && <span className="px-3 py-1 bg-green-500 text-white text-sm font-bold rounded-full">NEW</span>}
+              </div>
+
+              {/* Prev/Next (for frame switching) */}
               {product.images.length > 1 && (
                 <>
                   <button
-                    onClick={(e) => { e.stopPropagation(); setSelectedImage((p) => (p - 1 + product.images.length) % product.images.length); }}
+                    onClick={() => setSelectedImage((p) => (p - 1 + product.images.length) % product.images.length)}
                     className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 glass rounded-full flex items-center justify-center text-gray-400 hover:text-white transition-colors"
                     id="product-img-prev"
                   >
                     <ChevronLeft className="w-5 h-5" />
                   </button>
                   <button
-                    onClick={(e) => { e.stopPropagation(); setSelectedImage((p) => (p + 1) % product.images.length); }}
+                    onClick={() => setSelectedImage((p) => (p + 1) % product.images.length)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 glass rounded-full flex items-center justify-center text-gray-400 hover:text-white transition-colors"
                     id="product-img-next"
                   >
@@ -159,12 +156,6 @@ export default function ProductDetailClient({
                   </button>
                 </>
               )}
-
-              {/* Badges */}
-              <div className="absolute top-4 left-4 flex flex-col gap-2">
-                {discount > 0 && <span className="px-3 py-1 bg-red-500 text-white text-sm font-bold rounded-full">-{discount}%</span>}
-                {product.isNewArrival && <span className="px-3 py-1 bg-green-500 text-white text-sm font-bold rounded-full">NEW</span>}
-              </div>
             </div>
 
             {/* Thumbnails */}
@@ -341,6 +332,9 @@ export default function ProductDetailClient({
             </div>
           </div>
         </div>
+
+        {/* Mobile sticky buy bar */}
+        <StickyBuyBar name={product.name} price={price} inStock={inStock} onAdd={handleAddToCart} onWishlist={handleWishlist} />
 
         {/* Tabs */}
         <div className="mb-8">

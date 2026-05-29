@@ -83,7 +83,7 @@ export default function ProductsPageClient({
     <div className="min-h-screen bg-dark-base">
       {/* Page Header */}
       <div className="relative border-b border-white/5 py-12 bg-gradient-to-b from-blue-500/5 to-transparent">
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="container px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl sm:text-4xl font-display font-bold text-white mb-2">
             {initialFilters.category
               ? categories.find((c) => c.slug === initialFilters.category)?.name ?? "Products"
@@ -97,7 +97,7 @@ export default function ProductsPageClient({
         </div>
       </div>
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="container px-4 sm:px-6 lg:px-8 py-8">
         {/* Toolbar */}
         <div className="flex items-center justify-between mb-6 gap-4 flex-wrap">
           {/* Left: Filters toggle + Active filters */}
@@ -285,7 +285,7 @@ export default function ProductsPageClient({
             ) : (
               <>
                 <div className={cn(
-                  "gap-4 sm:gap-6",
+                  "gap-6 sm:gap-8",
                   viewMode === "grid"
                     ? "grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
                     : "grid grid-cols-1"

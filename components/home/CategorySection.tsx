@@ -103,7 +103,7 @@ export function CategorySection() {
       <div className="absolute top-1/2 left-0 w-96 h-96 rounded-full bg-blue-500/5 blur-3xl -translate-y-1/2" />
       <div className="absolute top-1/3 right-0 w-[500px] h-[500px] rounded-full bg-violet-500/5 blur-3xl" />
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-20">
           <motion.p

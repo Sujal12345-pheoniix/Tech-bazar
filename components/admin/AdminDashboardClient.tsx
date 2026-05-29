@@ -7,6 +7,7 @@ import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar
 } from "recharts";
 import { formatPrice } from "@/lib/utils";
+import AnimatedCounter from "@/components/ui/AnimatedCounter";
 import {
   TrendingUp, Users, Package, ShoppingBag, ArrowUpRight,
   LayoutDashboard, Box, ClipboardList, Tag, Settings
@@ -121,6 +122,18 @@ export default function AdminDashboardClient({
           {/* Stat Cards */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             {STAT_CARDS.map((stat, index) => (
+              // compute numeric value for AnimatedCounter
+              (() => {
+                let numericVal: number | string = 0;
+                if (typeof stat.value === "number") numericVal = stat.value;
+                else if (typeof stat.value === "string") {
+                  if (stat.value.includes("₹")) {
+                    numericVal = Number(stat.value.replace(/[^0-9.-]+/g, ""));
+                  } else {
+                    numericVal = Number(stat.value.toString().replace(/,/g, ""));
+                  }
+                }
+                return (
               <motion.div
                 key={stat.title}
                 initial={{ opacity: 0, y: 20 }}
@@ -137,10 +150,12 @@ export default function AdminDashboardClient({
                     {stat.change}
                   </span>
                 </div>
-                <p className="text-2xl font-display font-bold text-white mb-0.5">{stat.value}</p>
+                <p className="text-2xl font-display font-bold text-white mb-0.5"><AnimatedCounter value={numericVal} format={(n) => stat.title === 'Total Revenue' ? formatPrice(n) : n.toLocaleString()} /></p>
                 <p className="text-xs text-gray-400">{stat.title}</p>
                 <p className="text-xs text-gray-600 mt-0.5">{stat.suffix}</p>
               </motion.div>
+              );
+            })()
             ))}
           </div>
 

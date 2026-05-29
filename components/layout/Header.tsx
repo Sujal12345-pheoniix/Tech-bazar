@@ -83,15 +83,15 @@ export default function Header() {
         className={cn(
           "fixed left-0 right-0 z-50 transition-all duration-500 ease-in-out mx-auto px-4 sm:px-6 lg:px-8",
           scrolled
-            ? "top-3 md:top-4 w-[95%] max-w-[1440px] rounded-2xl md:rounded-full border border-white/10 bg-dark-100/70 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.5)] py-1.5 md:py-2"
-            : "top-0 w-full border-b border-white/5 bg-dark-base/40 backdrop-blur-sm py-0"
+            ? "top-3 md:top-4 w-[95%] container rounded-2xl md:rounded-full border border-white/10 bg-dark-100/70 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.5)] py-2 md:py-2"
+            : "top-0 w-full border-b border-white/5 bg-dark-base/40 backdrop-blur-sm py-2"
         )}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
       >
-        <div className="w-full max-w-[1440px] mx-auto">
-          <div className="flex items-center justify-between h-16 lg:h-18">
+        <div className="w-full container">
+          <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2 group">
               <div className="relative w-8 h-8">
@@ -343,7 +343,7 @@ export default function Header() {
               transition={{ duration: 0.2 }}
               className="lg:hidden glass border-t border-white/5 overflow-hidden"
             >
-              <nav className="w-full max-w-[1440px] mx-auto px-4 py-4 flex flex-col gap-1">
+              <nav className="w-full container px-4 py-4 flex flex-col gap-1">
                 {NAV_LINKS.map(({ href, label }) => (
                   <Link
                     key={href}
@@ -365,7 +365,7 @@ export default function Header() {
       </motion.header>
 
       {/* Spacer */}
-      {pathname !== "/" && <div className="h-16 lg:h-18" />}
+      {pathname !== "/" && <div className="h-16 lg:h-20" />}
     </>
   );
 }

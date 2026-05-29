@@ -88,11 +88,30 @@ body {
 
 /* Neural Grid Background */
 .neural-grid {
-  background-image:
-    linear-gradient(rgba(0, 82, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 82, 255, 0.04) 1px, transparent 1px);
-  background-size: 60px 60px;
+  /* Remove busy animated/grid background for a cleaner, neutral layout */
+  display: none;
 }
+
+/* Site-wide wrapper to provide consistent horizontal padding and centered content */
+.site-wrapper {
+  padding-left: 24px;
+  padding-right: 24px;
+}
+@media (min-width: 640px) {
+  .site-wrapper { padding-left: 32px; padding-right: 32px; }
+}
+@media (min-width: 1024px) {
+  .site-wrapper { padding-left: 56px; padding-right: 56px; }
+}
+
+/* Provide gentler vertical rhythm across sections */
+section { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+
+/* Slightly more generous default line-height and spacing for readability */
+body { line-height: 1.6; }
+
+/* Ensure consistent max-width container for children inside site-wrapper */
+.site-wrapper > * { max-width: 1200px; margin-left: auto; margin-right: auto; }
 
 /* Gradient Text */
 .gradient-text {

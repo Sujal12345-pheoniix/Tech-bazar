@@ -3,11 +3,11 @@ import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import { SessionProvider } from "@/providers/SessionProvider";
-import { Toaster } from "sonner";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import CartDrawer from "@/components/cart/CartDrawer";
+import DeferredUI from "@/components/layout/DeferredUI";
 import { auth } from "@/lib/auth";
+import CursorGlow from "@/components/ui/CursorGlow";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -62,9 +62,9 @@ export const metadata: Metadata = {
     googleBot: { index: true, follow: true },
   },
   icons: {
-    icon: "/icon.png",
-    shortcut: "/icon.png",
-    apple: "/icon.png",
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
   },
 };
 
@@ -85,24 +85,12 @@ export default async function RootLayout({
             enableSystem={false}
             disableTransitionOnChange={false}
           >
-            <div className="relative min-h-screen flex flex-col">
+            <div className="relative min-h-screen flex flex-col site-wrapper">
               <Header />
               <main className="flex-1">{children}</main>
               <Footer />
-              <CartDrawer />
             </div>
-            <Toaster
-              position="top-right"
-              richColors
-              toastOptions={{
-                style: {
-                  background: "rgba(9, 9, 11, 0.9)",
-                  backdropFilter: "blur(16px)",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                  color: "white",
-                },
-              }}
-            />
+            <DeferredUI />
           </ThemeProvider>
         </SessionProvider>
       </body>
