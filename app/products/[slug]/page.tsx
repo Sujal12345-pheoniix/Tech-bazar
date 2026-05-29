@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = await getProductBySlug(slug).catch(() => null);
   if (!product) return { title: "Product Not Found" };
   return {
-    title: `${product.name} — MobileHub`,
+    title: `${product.name} — TECH-BAAZAR`,
     description: product.shortDescription ?? product.description.substring(0, 160),
     openGraph: {
       title: product.name,

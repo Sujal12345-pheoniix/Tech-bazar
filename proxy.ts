@@ -2,7 +2,7 @@ import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export default auth(async function middleware(req: NextRequest & { auth: unknown }) {
+export default auth(async function proxy(req: NextRequest & { auth: unknown }) {
   const { pathname } = req.nextUrl;
   const session = (req as { auth: { user?: { role?: string } } | null }).auth;
 
@@ -12,7 +12,7 @@ export default auth(async function middleware(req: NextRequest & { auth: unknown
 
   // Redirect unauthenticated users
   if ((isProtectedUserRoute || isAdminRoute) && !session) {
-    return NextResponse.redirect(new URL(`/auth/signin?callbackUrl=${pathname}`, req.url));
+    return NextResponse.redirect(new URL(`/auth/signin?callbackUrl=${encodeURIComponent(pathname)}`, req.url));
   }
 
   // Redirect non-admins from admin routes

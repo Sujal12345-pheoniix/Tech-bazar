@@ -5,7 +5,7 @@ import DashboardClient from "@/components/dashboard/DashboardClient";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "My Dashboard — MobileHub",
+  title: "My Dashboard — TECH-BAAZAR",
   description: "Manage your orders, profile, wishlist, and address book.",
 };
 

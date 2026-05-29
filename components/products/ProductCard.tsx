@@ -63,6 +63,12 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
     const mouseY = e.clientY - rect.top - height / 2;
     x.set(mouseX / width);
     y.set(mouseY / height);
+
+    // Spotlight cursor follow
+    const spotX = e.clientX - rect.left;
+    const spotY = e.clientY - rect.top;
+    cardRef.current.style.setProperty("--mouse-x", `${spotX}px`);
+    cardRef.current.style.setProperty("--mouse-y", `${spotY}px`);
   };
 
   const handleMouseEnter = () => {
@@ -127,7 +133,14 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="relative rounded-2xl overflow-hidden glass border border-white/8 hover:border-blue-500/20 transition-all duration-300 hover:shadow-card-hover">
+      <div className="relative rounded-2xl overflow-hidden glass border border-white/8 hover:border-blue-500/20 transition-all duration-300 hover:shadow-card-hover cursor-spotlight-card">
+        {/* Spotlight cursor reflection */}
+        <div
+          className="absolute inset-0 pointer-events-none z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          style={{
+            background: `radial-gradient(200px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(0, 82, 255, 0.12), transparent 80%)`,
+          }}
+        />
         {/* Image Container */}
         <div className="relative aspect-square bg-gradient-to-br from-white/3 to-white/1 overflow-hidden">
           {/* Main product page image link */}

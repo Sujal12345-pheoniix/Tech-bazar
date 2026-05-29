@@ -131,7 +131,7 @@ export default function Footer() {
                   <Zap className="w-5 h-5 text-white relative z-10" />
                 </div>
               </div>
-              <span className="font-display font-bold text-2xl tracking-tight gradient-text">MobileHub</span>
+              <span className="font-display font-bold text-2xl tracking-tight gradient-text">TECH-BAAZAR</span>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed mb-6 max-w-xs">
               India&apos;s most premium mobile accessories store. Engineered for the future, crafted for you.
@@ -157,7 +157,7 @@ export default function Footer() {
             <div className="space-y-2 text-sm text-gray-400">
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-blue-400 flex-shrink-0" />
-                <span>support@mobilehub.in</span>
+                <span>support@techbaazar.com</span>
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-blue-400 flex-shrink-0" />
@@ -195,7 +195,7 @@ export default function Footer() {
         {/* Bottom Section */}
         <div className="border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-gray-500">
-            © {new Date().getFullYear()} MobileHub. All rights reserved. Made with ❤️ in India.
+            © {new Date().getFullYear()} TECH-BAAZAR. All rights reserved. Made with ❤️ in India.
           </p>
 
           {/* Social Links */}

@@ -100,8 +100,8 @@ export default function Header() {
                   <Zap className="w-4 h-4 text-white relative z-10" />
                 </div>
               </div>
-              <span className="font-display font-bold text-xl tracking-tight gradient-text">
-                MobileHub
+              <span className="font-display font-bold text-xl tracking-tight gradient-text uppercase">
+                Tech-Baazar
               </span>
             </Link>
 
@@ -365,7 +365,7 @@ export default function Header() {
       </motion.header>
 
       {/* Spacer */}
-      <div className="h-16 lg:h-18" />
+      {pathname !== "/" && <div className="h-16 lg:h-18" />}
     </>
   );
 }

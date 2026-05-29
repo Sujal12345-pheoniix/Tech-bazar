@@ -13,8 +13,8 @@ import { ArrowRight, Zap, Package, Headphones, Watch } from "lucide-react";
 import HomeProductsClient from "@/components/home/HomeProductsClient";
 
 export const metadata: Metadata = {
-  title: "MobileHub — India's Most Premium Mobile Accessories Store",
-  description: "Shop India's finest mobile accessories — premium phone cases, fast chargers, wireless earbuds, smartwatches & more. Free delivery above ₹499.",
+  title: "TECH-BAAZAR — The Future of Mobile Accessories",
+  description: "Experience India's most premium mobile accessories — phone cases, fast chargers, wireless earbuds, smartwatches, and more. Crafted for the future.",
 };
 
 export default async function HomePage() {
@@ -136,7 +136,7 @@ export default async function HomePage() {
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl sm:text-5xl font-display font-bold text-white mb-4">
-              Why <span className="gradient-text">MobileHub?</span>
+              Why <span className="gradient-text">TECH-BAAZAR?</span>
             </h2>
             <p className="text-gray-400 text-lg max-w-2xl mx-auto">
               We&apos;re not just a store — we&apos;re a premium experience engineered for the discerning customer.

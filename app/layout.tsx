@@ -24,8 +24,8 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
   title: {
-    default: "MobileHub — India's Most Premium Mobile Accessories Store",
-    template: "%s | MobileHub",
+    default: "TECH-BAAZAR — The Future of Mobile Accessories",
+    template: "%s | TECH-BAAZAR",
   },
   description:
     "Discover India's finest mobile accessories. Premium phone cases, fast chargers, wireless earbuds, smartwatches & more. Engineered for the future. Shop now with free delivery above ₹499.",
@@ -41,19 +41,19 @@ export const metadata: Metadata = {
     "screen protectors",
     "premium mobile accessories",
   ],
-  authors: [{ name: "MobileHub" }],
-  creator: "MobileHub",
+  authors: [{ name: "TECH-BAAZAR" }],
+  creator: "TECH-BAAZAR",
   openGraph: {
     type: "website",
     locale: "en_IN",
-    siteName: "MobileHub",
-    title: "MobileHub — India's Most Premium Mobile Accessories Store",
+    siteName: "TECH-BAAZAR",
+    title: "TECH-BAAZAR — The Future of Mobile Accessories",
     description:
       "Upgrade your mobile experience with India's most premium accessories. Free delivery above ₹499.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "MobileHub — Premium Mobile Accessories",
+    title: "TECH-BAAZAR — Premium Mobile Accessories",
     description: "Upgrade your mobile experience. Shop India's finest accessories.",
   },
   robots: {

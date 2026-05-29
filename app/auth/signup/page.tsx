@@ -69,7 +69,7 @@ export default function SignUpPage() {
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-violet-600 rounded-xl rotate-12" />
               <div className="absolute inset-0 flex items-center justify-center"><Zap className="w-5 h-5 text-white" /></div>
             </div>
-            <span className="font-display font-bold text-2xl gradient-text">MobileHub</span>
+            <span className="font-display font-bold text-2xl gradient-text">TECH-BAAZAR</span>
           </Link>
 
           <h1 className="text-2xl font-display font-bold text-white mb-1 text-center">Create account</h1>
