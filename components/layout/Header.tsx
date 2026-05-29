@@ -1,0 +1,353 @@
+"use client";
+
+import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import { useSession, signOut } from "next-auth/react";
+import { useCartStore } from "@/store/cartStore";
+import { useWishlistStore } from "@/store/wishlistStore";
+import { useUIStore } from "@/store/uiStore";
+import { searchProducts } from "@/actions/products";
+import { cn } from "@/lib/utils";
+import {
+  ShoppingCart, Heart, Search, Menu, X, Sun, Moon,
+  User, Package, LogOut, ChevronDown, Zap, Settings
+} from "lucide-react";
+
+const NAV_LINKS = [
+  { href: "/products", label: "All Products" },
+  { href: "/products?category=phone-cases", label: "Cases" },
+  { href: "/products?category=chargers", label: "Chargers" },
+  { href: "/products?category=audio", label: "Audio" },
+  { href: "/products?category=smartwatches", label: "Wearables" },
+  { href: "/products?category=gaming", label: "Gaming" },
+];
+
+export default function Header() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const { data: session } = useSession();
+  const itemCount = useCartStore((s) => s.getItemCount());
+  const toggleCart = useCartStore((s) => s.toggleCart);
+  const wishlistCount = useWishlistStore((s) => s.getCount());
+  const { theme, toggleTheme, searchOpen, setSearchOpen, mobileMenuOpen, setMobileMenuOpen } = useUIStore();
+
+  const [scrolled, setScrolled] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<Array<{ id: string; name: string; slug: string; images: Array<{ url: string }> }>>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handler = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handler);
+    return () => window.removeEventListener("scroll", handler);
+  }, []);
+
+  useEffect(() => {
+    setMobileMenuOpen(false);
+    setSearchOpen(false);
+  }, [pathname, setMobileMenuOpen, setSearchOpen]);
+
+  useEffect(() => {
+    if (!searchQuery.trim()) { setSearchResults([]); return; }
+    const timeout = setTimeout(async () => {
+      setIsSearching(true);
+      try {
+        const results = await searchProducts(searchQuery);
+        setSearchResults(results as Array<{ id: string; name: string; slug: string; images: Array<{ url: string }> }>);
+      } finally {
+        setIsSearching(false);
+      }
+    }, 300);
+    return () => clearTimeout(timeout);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setSearchOpen(false);
+        setSearchQuery("");
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [setSearchOpen]);
+
+  return (
+    <>
+      <motion.header
+        className={cn(
+          "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+          scrolled
+            ? "glass border-b border-white/5 shadow-[0_4px_24px_rgba(0,0,0,0.4)]"
+            : "bg-transparent"
+        )}
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 lg:h-18">
+            {/* Logo */}
+            <Link href="/" className="flex items-center gap-2 group">
+              <div className="relative w-8 h-8">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-violet-600 rounded-lg rotate-12 group-hover:rotate-6 transition-transform duration-300" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Zap className="w-4 h-4 text-white relative z-10" />
+                </div>
+              </div>
+              <span className="font-display font-bold text-xl tracking-tight gradient-text">
+                MobileHub
+              </span>
+            </Link>
+
+            {/* Desktop Nav */}
+            <nav className="hidden lg:flex items-center gap-1">
+              {NAV_LINKS.map(({ href, label }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className={cn(
+                    "px-4 py-2 rounded-full text-sm font-medium transition-all duration-200",
+                    pathname === href || (href !== "/" && pathname.startsWith(href.split("?")[0]))
+                      ? "bg-blue-500/10 text-blue-400 border border-blue-500/20"
+                      : "text-gray-400 hover:text-white hover:bg-white/5"
+                  )}
+                >
+                  {label}
+                </Link>
+              ))}
+            </nav>
+
+            {/* Actions */}
+            <div className="flex items-center gap-1 sm:gap-2">
+              {/* Search */}
+              <div ref={searchRef} className="relative">
+                <button
+                  onClick={() => setSearchOpen(!searchOpen)}
+                  className="p-2 rounded-full text-gray-400 hover:text-white hover:bg-white/5 transition-all"
+                  aria-label="Search"
+                  id="header-search-btn"
+                >
+                  <Search className="w-5 h-5" />
+                </button>
+
+                <AnimatePresence>
+                  {searchOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute right-0 top-12 w-80 glass rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.5)] border border-white/10"
+                    >
+                      <div className="p-3">
+                        <div className="flex items-center gap-2 bg-white/5 rounded-xl px-3 py-2">
+                          <Search className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                          <input
+                            autoFocus
+                            type="text"
+                            placeholder="Search products..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full bg-transparent text-sm text-white placeholder-gray-500 outline-none"
+                            id="header-search-input"
+                          />
+                          {searchQuery && (
+                            <button onClick={() => setSearchQuery("")}>
+                              <X className="w-3 h-3 text-gray-400" />
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      {isSearching && (
+                        <div className="px-4 pb-3 text-sm text-gray-400">Searching...</div>
+                      )}
+
+                      {searchResults.length > 0 && (
+                        <div className="border-t border-white/5">
+                          {searchResults.map((p) => (
+                            <Link
+                              key={p.id}
+                              href={`/products/${p.slug}`}
+                              onClick={() => { setSearchOpen(false); setSearchQuery(""); }}
+                              className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors"
+                            >
+                              {p.images?.[0] && (
+                                <img src={p.images[0].url} alt={p.name} className="w-10 h-10 rounded-lg object-cover" />
+                              )}
+                              <span className="text-sm text-gray-300 line-clamp-1">{p.name}</span>
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+
+                      {searchQuery && !isSearching && searchResults.length === 0 && (
+                        <div className="px-4 pb-4 text-sm text-gray-500 text-center">
+                          No results for &quot;{searchQuery}&quot;
+                        </div>
+                      )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Theme Toggle */}
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-full text-gray-400 hover:text-white hover:bg-white/5 transition-all"
+                aria-label="Toggle theme"
+                id="header-theme-btn"
+              >
+                {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </button>
+
+              {/* Wishlist */}
+              <Link
+                href="/dashboard?tab=wishlist"
+                className="relative p-2 rounded-full text-gray-400 hover:text-white hover:bg-white/5 transition-all"
+                aria-label="Wishlist"
+                id="header-wishlist-btn"
+              >
+                <Heart className="w-5 h-5" />
+                {wishlistCount > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-pink-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                    {wishlistCount}
+                  </span>
+                )}
+              </Link>
+
+              {/* Cart */}
+              <button
+                onClick={toggleCart}
+                className="relative p-2 rounded-full text-gray-400 hover:text-white hover:bg-white/5 transition-all"
+                aria-label="Cart"
+                id="header-cart-btn"
+              >
+                <ShoppingCart className="w-5 h-5" />
+                {itemCount > 0 && (
+                  <motion.span
+                    key={itemCount}
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-blue-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center"
+                  >
+                    {itemCount > 9 ? "9+" : itemCount}
+                  </motion.span>
+                )}
+              </button>
+
+              {/* User Menu */}
+              {session ? (
+                <div className="relative">
+                  <button
+                    onClick={() => setUserMenuOpen(!userMenuOpen)}
+                    className="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-full glass hover:bg-white/10 transition-all text-sm"
+                    id="header-user-btn"
+                  >
+                    {session.user?.image ? (
+                      <img src={session.user.image} alt={session.user.name ?? ""} className="w-6 h-6 rounded-full" />
+                    ) : (
+                      <div className="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center">
+                        <User className="w-3.5 h-3.5 text-blue-400" />
+                      </div>
+                    )}
+                    <span className="text-gray-300 hidden sm:block max-w-20 truncate">
+                      {session.user?.name?.split(" ")[0]}
+                    </span>
+                    <ChevronDown className={cn("w-3 h-3 text-gray-400 transition-transform", userMenuOpen && "rotate-180")} />
+                  </button>
+
+                  <AnimatePresence>
+                    {userMenuOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -8, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -8, scale: 0.95 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute right-0 top-12 w-48 glass rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.5)] border border-white/10"
+                      >
+                        <div className="p-1">
+                          <Link href="/dashboard" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors" onClick={() => setUserMenuOpen(false)}>
+                            <Package className="w-4 h-4 text-blue-400" /> My Orders
+                          </Link>
+                          <Link href="/dashboard?tab=profile" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors" onClick={() => setUserMenuOpen(false)}>
+                            <Settings className="w-4 h-4 text-violet-400" /> Profile
+                          </Link>
+                          {(session.user as { role?: string })?.role === "ADMIN" && (
+                            <Link href="/admin" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors" onClick={() => setUserMenuOpen(false)}>
+                              <Zap className="w-4 h-4 text-cyan-400" /> Admin
+                            </Link>
+                          )}
+                          <div className="my-1 border-t border-white/5" />
+                          <button onClick={() => signOut({ callbackUrl: "/" })} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-red-400 hover:bg-red-500/10 transition-colors">
+                            <LogOut className="w-4 h-4" /> Sign Out
+                          </button>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ) : (
+                <Link
+                  href="/auth/signin"
+                  className="hidden sm:flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium rounded-full transition-all shadow-glow-sm"
+                  id="header-signin-btn"
+                >
+                  Sign In
+                </Link>
+              )}
+
+              {/* Mobile Menu Toggle */}
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="lg:hidden p-2 rounded-full text-gray-400 hover:text-white hover:bg-white/5 transition-all"
+                aria-label="Menu"
+                id="header-menu-btn"
+              >
+                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="lg:hidden glass border-t border-white/5 overflow-hidden"
+            >
+              <nav className="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-1">
+                {NAV_LINKS.map(({ href, label }) => (
+                  <Link
+                    key={href}
+                    href={href}
+                    className="px-4 py-3 rounded-xl text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-colors"
+                  >
+                    {label}
+                  </Link>
+                ))}
+                {!session && (
+                  <Link href="/auth/signin" className="mt-2 px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium rounded-xl text-center transition-colors">
+                    Sign In
+                  </Link>
+                )}
+              </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.header>
+
+      {/* Spacer */}
+      <div className="h-16 lg:h-18" />
+    </>
+  );
+}
