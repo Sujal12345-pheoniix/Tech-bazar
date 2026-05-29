@@ -18,7 +18,7 @@ type OrderType = {
   items: Array<{ id: string; name: string; image?: string | null; price: number; quantity: number }>;
 };
 
-const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.ElementType }> = {
+const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.ComponentType<{ className?: string }> }> = {
   PENDING: { label: "Pending", color: "text-yellow-400 bg-yellow-400/10", icon: Clock },
   CONFIRMED: { label: "Confirmed", color: "text-blue-400 bg-blue-400/10", icon: CheckCircle },
   PROCESSING: { label: "Processing", color: "text-violet-400 bg-violet-400/10", icon: Package },

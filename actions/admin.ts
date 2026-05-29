@@ -18,7 +18,7 @@ const productSchema = z.object({
   isFeatured: z.boolean().default(false),
   isTrending: z.boolean().default(false),
   isNewArrival: z.boolean().default(true),
-  specifications: z.record(z.string()).optional(),
+  specifications: z.record(z.string(), z.string()).optional(),
   images: z.array(z.object({ url: z.string(), altText: z.string().optional(), isPrimary: z.boolean().default(false) })).optional(),
   stock: z.number().default(0),
 });
@@ -36,15 +36,17 @@ export async function createProduct(data: z.infer<typeof productSchema>) {
   const parsed = productSchema.parse(data);
   const slug = slugify(parsed.name);
 
+  const { images, stock, ...rawFields } = parsed;
+
   const product = await prisma.product.create({
     data: {
-      ...parsed,
+      ...rawFields,
       slug,
-      tags: parsed.tags ?? [],
-      images: parsed.images
-        ? { create: parsed.images.map((img, i) => ({ ...img, sortOrder: i })) }
+      tags: rawFields.tags ?? [],
+      images: images
+        ? { create: images.map((img, i) => ({ ...img, sortOrder: i })) }
         : undefined,
-      inventory: { create: { quantity: parsed.stock } },
+      inventory: { create: { quantity: stock } },
     },
     include: { images: true, inventory: true },
   });
@@ -57,13 +59,21 @@ export async function createProduct(data: z.infer<typeof productSchema>) {
 export async function updateProduct(id: string, data: Partial<z.infer<typeof productSchema>>) {
   await requireAdmin();
 
+  const { images, stock, ...rawFields } = data;
+
   const product = await prisma.product.update({
     where: { id },
     data: {
-      ...data,
-      ...(data.name && { slug: slugify(data.name) }),
-      ...(data.stock !== undefined && {
-        inventory: { upsert: { create: { quantity: data.stock }, update: { quantity: data.stock } } },
+      ...rawFields,
+      ...(rawFields.name && { slug: slugify(rawFields.name) }),
+      ...(stock !== undefined && {
+        inventory: { upsert: { create: { quantity: stock }, update: { quantity: stock } } },
+      }),
+      ...(images && {
+        images: {
+          deleteMany: {},
+          create: images.map((img, i) => ({ ...img, sortOrder: i })),
+        },
       }),
     },
   });

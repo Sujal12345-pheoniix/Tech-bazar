@@ -179,7 +179,7 @@ export default function AdminDashboardClient({
                   tickFormatter={(v) => activeChart === "revenue" ? `₹${(v / 1000).toFixed(0)}K` : v.toString()} />
                 <Tooltip
                   contentStyle={{ background: "rgba(9,9,11,0.9)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px", color: "#fff" }}
-                  formatter={(value: number) => [activeChart === "revenue" ? formatPrice(value) : value, activeChart === "revenue" ? "Revenue" : "Orders"]}
+                  formatter={(value: any) => [activeChart === "revenue" ? formatPrice(Number(value)) : value, activeChart === "revenue" ? "Revenue" : "Orders"]}
                 />
                 <Area type="monotone" dataKey={activeChart} stroke="#3b82f6" strokeWidth={2} fill="url(#colorRevenue)" />
               </AreaChart>

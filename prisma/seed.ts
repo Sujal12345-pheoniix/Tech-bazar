@@ -1,10 +1,12 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import "dotenv/config";
+import { Pool } from "pg";
+import { PrismaPg } from "@prisma/adapter-pg";
 
-const prisma = new PrismaClient({
-  datasourceUrl: process.env.DATABASE_URL,
-});
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const adapter = new PrismaPg(pool);
+const prisma = new PrismaClient({ adapter });
 
 
 const CATEGORIES = [
@@ -171,7 +173,7 @@ async function main() {
         rating: product.rating ?? 4.5,
         reviewCount: product.reviewCount ?? 0,
         soldCount: product.soldCount ?? 0,
-        specifications: product.specifications ?? null,
+        specifications: product.specifications ?? undefined,
         images: {
           create: [
             { url: imageUrl, altText: product.name, isPrimary: true, sortOrder: 0 },

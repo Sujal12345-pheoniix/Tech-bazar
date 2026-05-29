@@ -17,7 +17,7 @@ export async function submitReview(data: z.infer<typeof reviewSchema>) {
   if (!session?.user?.id) return { error: "Please sign in to write a review" };
 
   const parsed = reviewSchema.safeParse(data);
-  if (!parsed.success) return { error: parsed.error.errors[0].message };
+  if (!parsed.success) return { error: parsed.error.issues[0].message };
 
   // Check if user already reviewed
   const existing = await prisma.review.findFirst({

@@ -35,19 +35,22 @@ export async function createCheckoutSession(data: z.infer<typeof checkoutSchema>
   if (couponCode) {
     const coupon = await prisma.coupon.findFirst({
       where: {
-        code: couponCode,
+        code: { equals: couponCode, mode: "insensitive" },
         isActive: true,
-        OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }],
-        OR: [{ usageLimit: null }, { usedCount: { lt: prisma.coupon.fields.usageLimit } }],
       },
     });
     if (coupon) {
-      const subtotal = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
-      if (!coupon.minOrderValue || subtotal >= coupon.minOrderValue) {
-        discountAmount =
-          coupon.type === "PERCENTAGE"
-            ? Math.min((subtotal * coupon.value) / 100, coupon.maxDiscount ?? Infinity)
-            : coupon.value;
+      const isExpired = coupon.expiresAt && coupon.expiresAt < new Date();
+      const isLimitReached = coupon.usageLimit !== null && coupon.usedCount >= coupon.usageLimit;
+
+      if (!isExpired && !isLimitReached) {
+        const subtotal = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
+        if (!coupon.minOrderValue || subtotal >= coupon.minOrderValue) {
+          discountAmount =
+            coupon.type === "PERCENTAGE"
+              ? Math.min((subtotal * coupon.value) / 100, coupon.maxDiscount ?? Infinity)
+              : coupon.value;
+        }
       }
     }
   }
@@ -137,11 +140,16 @@ export async function validateCoupon(code: string, subtotal: number) {
     where: {
       code: { equals: code, mode: "insensitive" },
       isActive: true,
-      OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }],
     },
   });
 
-  if (!coupon) return { error: "Invalid or expired coupon code" };
+  if (!coupon) return { error: "Invalid coupon code" };
+  if (coupon.expiresAt && coupon.expiresAt < new Date()) {
+    return { error: "This coupon has expired" };
+  }
+  if (coupon.usageLimit !== null && coupon.usedCount >= coupon.usageLimit) {
+    return { error: "This coupon has reached its usage limit" };
+  }
   if (coupon.minOrderValue && subtotal < coupon.minOrderValue) {
     return { error: `Minimum order value of ₹${coupon.minOrderValue} required` };
   }
