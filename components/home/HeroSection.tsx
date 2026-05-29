@@ -15,7 +15,6 @@ const HERO_WORDS = ["Experience", "Lifestyle", "Performance", "Future"];
 
 export function HeroSection() {
   const [currentWord, setCurrentWord] = useState(0);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -25,48 +24,21 @@ export function HeroSection() {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({
-        x: (e.clientX / window.innerWidth - 0.5) * 30,
-        y: (e.clientY / window.innerHeight - 0.5) * 30,
-      });
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
-
   return (
     <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-dark-base">
       {/* Neural Grid Background */}
       <div className="absolute inset-0 neural-grid opacity-40" />
 
-      {/* Gradient Orbs */}
-      <div
-        className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full opacity-20 blur-3xl pointer-events-none"
-        style={{
-          background: "radial-gradient(circle, rgba(0,82,255,0.6) 0%, transparent 70%)",
-          transform: `translate(${mousePos.x * 0.5}px, ${mousePos.y * 0.5}px)`,
-          transition: "transform 0.8s ease",
-        }}
-      />
-      <div
-        className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full opacity-15 blur-3xl pointer-events-none"
-        style={{
-          background: "radial-gradient(circle, rgba(124,58,237,0.8) 0%, transparent 70%)",
-          transform: `translate(${-mousePos.x * 0.3}px, ${-mousePos.y * 0.3}px)`,
-          transition: "transform 0.8s ease",
-        }}
-      />
-      <div className="absolute top-1/2 right-1/3 w-[300px] h-[300px] rounded-full opacity-10 blur-2xl pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(6,182,212,0.8) 0%, transparent 70%)" }}
-      />
+      {/* Static Premium Ambient Glow Orbs */}
+      <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full opacity-15 blur-3xl pointer-events-none bg-gradient-radial from-blue-500/40 to-transparent" />
+      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full opacity-10 blur-3xl pointer-events-none bg-gradient-radial from-violet-500/40 to-transparent" />
+      <div className="absolute top-1/2 right-1/3 w-[300px] h-[300px] rounded-full opacity-8 blur-2xl pointer-events-none bg-gradient-radial from-cyan-500/30 to-transparent" />
 
       {/* 3D Canvas */}
       <HeroScene />
 
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {/* Badge */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -127,7 +99,7 @@ export function HeroSection() {
           <Link
             href="/products"
             id="hero-shop-btn"
-            className="group flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-500 to-violet-600 hover:from-blue-600 hover:to-violet-700 text-white font-semibold rounded-full transition-all shadow-glow-md hover:shadow-glow-lg text-lg"
+            className="group btn-premium-primary px-8 py-4 text-lg gap-2 cursor-pointer"
           >
             Shop Now
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -135,7 +107,7 @@ export function HeroSection() {
           <Link
             href="/products?featured=true"
             id="hero-featured-btn"
-            className="flex items-center gap-2 px-8 py-4 glass hover:bg-white/10 border border-white/10 text-white font-semibold rounded-full transition-all text-lg"
+            className="btn-premium-secondary px-8 py-4 text-lg cursor-pointer"
           >
             View Featured
           </Link>

@@ -102,7 +102,7 @@ export default function ProductDetailClient({
 
   return (
     <div className="min-h-screen bg-dark-base">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 text-sm text-gray-400 mb-8">
           <Link href="/" className="hover:text-white transition-colors">Home</Link>
@@ -295,10 +295,10 @@ export default function ProductDetailClient({
                 onClick={handleAddToCart}
                 disabled={!inStock}
                 className={cn(
-                  "flex-1 flex items-center justify-center gap-2 py-4 rounded-2xl font-semibold text-base transition-all",
+                  "flex-1 flex items-center justify-center gap-2 cursor-pointer font-semibold text-base transition-all",
                   inStock
-                    ? "bg-gradient-to-r from-blue-500 to-violet-600 hover:from-blue-600 hover:to-violet-700 text-white shadow-glow-sm hover:shadow-glow-md"
-                    : "bg-gray-700 text-gray-400 cursor-not-allowed"
+                    ? "btn-premium-primary rounded-2xl py-4"
+                    : "bg-gray-700 text-gray-400 rounded-2xl py-4 cursor-not-allowed"
                 )}
                 id="product-add-cart-btn"
               >

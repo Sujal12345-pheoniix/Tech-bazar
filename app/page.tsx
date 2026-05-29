@@ -37,7 +37,7 @@ export default async function HomePage() {
       {/* Trending Products */}
       {trendingProducts.length > 0 && (
         <section className="py-24 relative">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-end justify-between mb-12">
               <div>
                 <p className="text-orange-400 text-sm font-semibold uppercase tracking-widest mb-2">🔥 Hot Right Now</p>
@@ -59,7 +59,7 @@ export default async function HomePage() {
 
       {/* Featured Collections Banner */}
       <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               {
@@ -114,7 +114,7 @@ export default async function HomePage() {
       {/* Featured Products */}
       {featuredProducts.length > 0 && (
         <section className="py-24 relative">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-end justify-between mb-12">
               <div>
                 <p className="text-blue-400 text-sm font-semibold uppercase tracking-widest mb-2">⭐ Editor&apos;s Pick</p>
@@ -133,7 +133,7 @@ export default async function HomePage() {
 
       {/* Why Choose Us */}
       <section className="py-24 border-t border-white/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl sm:text-5xl font-display font-bold text-white mb-4">
               Why <span className="gradient-text">MobileHub?</span>
@@ -183,9 +183,9 @@ export default async function HomePage() {
               <Link
                 href="/products"
                 id="cta-shop-btn"
-                className="inline-flex items-center gap-2 px-10 py-4 bg-gradient-to-r from-blue-500 to-violet-600 hover:from-blue-600 hover:to-violet-700 text-white font-bold rounded-full transition-all shadow-glow-lg text-lg"
+                className="group btn-premium-primary px-10 py-4 text-lg gap-2 cursor-pointer"
               >
-                Start Shopping <ArrowRight className="w-5 h-5" />
+                Start Shopping <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
           </div>

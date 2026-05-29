@@ -38,6 +38,7 @@ export default function Header() {
   const [searchResults, setSearchResults] = useState<Array<{ id: string; name: string; slug: string; images: Array<{ url: string }> }>>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const searchRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -80,16 +81,16 @@ export default function Header() {
     <>
       <motion.header
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+          "fixed left-0 right-0 z-50 transition-all duration-500 ease-in-out mx-auto px-4 sm:px-6 lg:px-8",
           scrolled
-            ? "glass border-b border-white/5 shadow-[0_4px_24px_rgba(0,0,0,0.4)]"
-            : "bg-transparent"
+            ? "top-3 md:top-4 w-[95%] max-w-[1440px] rounded-2xl md:rounded-full border border-white/10 bg-dark-100/70 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.5)] py-1.5 md:py-2"
+            : "top-0 w-full border-b border-white/5 bg-dark-base/40 backdrop-blur-sm py-0"
         )}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-[1440px] mx-auto">
           <div className="flex items-center justify-between h-16 lg:h-18">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2 group">
@@ -105,21 +106,38 @@ export default function Header() {
             </Link>
 
             {/* Desktop Nav */}
-            <nav className="hidden lg:flex items-center gap-1">
-              {NAV_LINKS.map(({ href, label }) => (
-                <Link
-                  key={href}
-                  href={href}
-                  className={cn(
-                    "px-4 py-2 rounded-full text-sm font-medium transition-all duration-200",
-                    pathname === href || (href !== "/" && pathname.startsWith(href.split("?")[0]))
-                      ? "bg-blue-500/10 text-blue-400 border border-blue-500/20"
-                      : "text-gray-400 hover:text-white hover:bg-white/5"
-                  )}
-                >
-                  {label}
-                </Link>
-              ))}
+            <nav className="hidden lg:flex items-center gap-1 relative">
+              {NAV_LINKS.map(({ href, label }) => {
+                const isActive = pathname === href || (href !== "/" && pathname.startsWith(href.split("?")[0]));
+                return (
+                  <Link
+                    key={href}
+                    href={href}
+                    onMouseEnter={() => setHoveredLink(href)}
+                    onMouseLeave={() => setHoveredLink(null)}
+                    className={cn(
+                      "relative px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-250 z-10",
+                      isActive ? "text-blue-400" : "text-gray-400 hover:text-white"
+                    )}
+                  >
+                    {isActive && (
+                      <motion.span
+                        layoutId="activeDot"
+                        className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-blue-500 rounded-full"
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                    {hoveredLink === href && (
+                      <motion.span
+                        layoutId="navHover"
+                        className="absolute inset-0 bg-white/8 rounded-full -z-10"
+                        transition={{ type: "spring", stiffness: 380, damping: 28 }}
+                      />
+                    )}
+                    {label}
+                  </Link>
+                );
+              })}
             </nav>
 
             {/* Actions */}
@@ -325,7 +343,7 @@ export default function Header() {
               transition={{ duration: 0.2 }}
               className="lg:hidden glass border-t border-white/5 overflow-hidden"
             >
-              <nav className="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-1">
+              <nav className="w-full max-w-[1440px] mx-auto px-4 py-4 flex flex-col gap-1">
                 {NAV_LINKS.map(({ href, label }) => (
                   <Link
                     key={href}
