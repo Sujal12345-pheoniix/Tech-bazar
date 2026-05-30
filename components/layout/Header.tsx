@@ -139,7 +139,7 @@ export default function Header() {
           </nav>
 
           {/* Actions */}
-          <div className="flex items-center gap-1.5 md:gap-2">
+          <div className="flex items-center gap-3 md:gap-4 lg:gap-5">
             {/* Search */}
             <div ref={searchRef} className="relative">
               <button

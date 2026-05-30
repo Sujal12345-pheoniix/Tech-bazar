@@ -82,24 +82,24 @@ export function TestimonialsSection() {
         </div>
 
         {/* Masonry Layout Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 items-start">
           
           {/* Column 1 */}
-          <div className="space-y-6">
+          <div className="space-y-8 lg:space-y-10">
             {[TESTIMONIALS[0], TESTIMONIALS[3]].map((item) => (
               <TestimonialCard key={item.name} item={item} />
             ))}
           </div>
 
           {/* Column 2 */}
-          <div className="space-y-6 md:mt-12 lg:mt-6">
+          <div className="space-y-8 lg:space-y-10 md:mt-12 lg:mt-8">
             {[TESTIMONIALS[1], TESTIMONIALS[4]].map((item) => (
               <TestimonialCard key={item.name} item={item} />
             ))}
           </div>
 
           {/* Column 3 */}
-          <div className="space-y-6 lg:mt-12">
+          <div className="space-y-8 lg:space-y-10 lg:mt-16">
             {[TESTIMONIALS[2], TESTIMONIALS[5]].map((item) => (
               <TestimonialCard key={item.name} item={item} />
             ))}
