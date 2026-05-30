@@ -46,7 +46,7 @@ export default function ForgotPasswordPage() {
         <div
           ref={formRef}
           onMouseMove={handleMouseMove}
-          className="glass-premium rounded-[32px] border border-white/5 p-8 sm:p-10 shadow-[0_40px_80px_rgba(0,0,0,0.85)] cursor-spotlight-card relative overflow-hidden"
+          className="glass-premium rounded-[32px] border border-white/5 p-5 sm:p-10 shadow-[0_40px_80px_rgba(0,0,0,0.85)] cursor-spotlight-card relative overflow-hidden"
         >
           {/* Spotlight reflection */}
           <div
