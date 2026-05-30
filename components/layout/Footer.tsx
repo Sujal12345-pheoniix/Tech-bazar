@@ -142,12 +142,11 @@ export default function Footer() {
           {/* Brand Col */}
           <div className="lg:col-span-4 space-y-8">
             <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="relative w-10 h-10">
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-violet-600 rounded-xl rotate-12 group-hover:rotate-6 transition-transform duration-300 shadow-[0_4px_15px_rgba(0,82,255,0.3)]" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <Zap className="w-5 h-5 text-white relative z-10" />
-                </div>
-              </div>
+              <img 
+                src="/icon.png" 
+                alt="Tech-Baazar Logo" 
+                className="w-10 h-10 object-contain group-hover:scale-105 transition-transform duration-300"
+              />
               <span className="font-display font-black text-2xl tracking-tight text-white uppercase">
                 Tech-Baazar
               </span>

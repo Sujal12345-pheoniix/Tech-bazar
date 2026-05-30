@@ -34,12 +34,18 @@ export function HeroSection() {
 
         {/* 3D Interactive Scene (desktop only) */}
         {render3D ? <LazyHeroScene /> : (
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
-            <div className="w-full max-w-3xl h-80 rounded-3xl glass border border-white/6 overflow-hidden flex items-center justify-center relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-black/60 to-violet-900/30" />
-              <div className="relative z-10 text-center px-6">
-                <div className="mx-auto w-36 h-72 rounded-2xl bg-gradient-to-tr from-blue-800 to-violet-700 shadow-[0_40px_120px_rgba(124,58,237,0.22)]" />
-                <p className="text-gray-300 mt-4">Experience the floating showroom — rotate products on desktop</p>
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 px-4">
+            <div className="w-full max-w-md h-80 rounded-3xl glass border border-white/6 overflow-hidden flex items-center justify-center relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-black/60 to-violet-950/20" />
+              <div className="relative z-10 text-center px-6 space-y-4">
+                <div className="mx-auto w-36 h-36 flex items-center justify-center bg-gradient-to-br from-blue-500/10 to-violet-500/10 border border-white/10 rounded-full shadow-[0_20px_50px_rgba(0,82,255,0.25)] relative overflow-hidden group">
+                  <img
+                    src="/icon.png"
+                    alt="Tech-Baazar Brand Logo"
+                    className="w-24 h-24 object-contain drop-shadow-[0_10px_25px_rgba(0,82,255,0.4)] float-1"
+                  />
+                </div>
+                <p className="text-gray-400 text-sm">Experience the floating showroom — rotate products on desktop</p>
               </div>
             </div>
           </div>
@@ -59,7 +65,7 @@ export function HeroSection() {
           >
             <span className="w-2 h-2 bg-blue-500 rounded-full animate-ping" />
             <span className="text-gray-300 font-medium">The Future of Mobile Accessories.</span>
-            <Zap className="w-3.5 h-3.5 text-blue-400" />
+            <img src="/icon.png" alt="" className="w-4 h-4 object-contain" />
           </motion.div>
 
           {/* Main Heading with cinematic text reveal */}

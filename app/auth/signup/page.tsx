@@ -90,12 +90,11 @@ export default function SignUpPage() {
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 mb-8 justify-center group">
-            <div className="relative w-8 h-8">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-violet-600 rounded-lg rotate-12 group-hover:rotate-6 transition-transform" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <Zap className="w-4.5 h-4.5 text-white" />
-              </div>
-            </div>
+            <img 
+              src="/icon.png" 
+              alt="Tech-Baazar Logo" 
+              className="w-8 h-8 object-contain group-hover:scale-105 transition-transform duration-300"
+            />
             <span className="font-display font-black text-xl tracking-tight text-white uppercase">TECH-BAAZAR</span>
           </Link>
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { ReactNode, useRef } from "react";
+import Link from "next/link";
 
 type MagneticButtonProps = React.HTMLAttributes<HTMLElement> & {
   children: ReactNode;
@@ -42,10 +43,9 @@ export default function MagneticButton({ children, className = "", style = {}, h
 
   if (href) {
     return (
-      // eslint-disable-next-line jsx-a11y/anchor-is-valid
-      <a {...common} href={href} {...props}>
+      <Link href={href} {...common} {...props}>
         {children}
-      </a>
+      </Link>
     );
   }
 

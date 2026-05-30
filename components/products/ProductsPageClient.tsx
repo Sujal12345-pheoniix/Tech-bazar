@@ -291,7 +291,7 @@ export default function ProductsPageClient({
                     : "grid grid-cols-1"
                 )}>
                   {initialProducts.map((product, index) => (
-                    <ProductCard key={product.id} product={product} index={index} />
+                    <ProductCard key={product.id} product={product} index={index} layoutMode={viewMode} />
                   ))}
                 </div>
 
