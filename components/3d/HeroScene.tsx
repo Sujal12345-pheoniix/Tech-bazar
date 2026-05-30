@@ -212,13 +212,23 @@ function FloatingOrb({ position, color, scale = 1 }: { position: [number, number
   );
 }
 
+function InteractiveLight() {
+  const lightRef = useRef<THREE.PointLight>(null);
+  useFrame((state) => {
+    if (!lightRef.current) return;
+    lightRef.current.position.x = THREE.MathUtils.lerp(lightRef.current.position.x, state.pointer.x * 6, 0.08);
+    lightRef.current.position.y = THREE.MathUtils.lerp(lightRef.current.position.y, state.pointer.y * 6, 0.08);
+  });
+  return <pointLight ref={lightRef} position={[0, 0, 4]} intensity={5.5} color="#00ffff" decay={1.5} distance={15} castShadow />;
+}
+
 function Scene() {
   return (
     <>
-      <ambientLight intensity={0.4} />
+      <ambientLight intensity={0.45} />
       <pointLight position={[5, 5, 5]} intensity={3.5} color="#0052ff" />
       <pointLight position={[-6, -4, 4]} intensity={2.5} color="#7c3aed" />
-      <pointLight position={[0, -5, 2]} intensity={2.0} color="#00ffff" />
+      <InteractiveLight />
       <directionalLight position={[0, 8, 2]} intensity={1.5} color="#ffffff" />
       
       <Stars radius={120} depth={50} count={3500} factor={4} fade speed={0.8} />

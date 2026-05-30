@@ -1,14 +1,16 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { Zap, Mail, Phone, MapPin, ArrowRight } from "lucide-react";
-import { motion } from "framer-motion";
+import { Zap, Mail, Phone, MapPin, ArrowRight, Check } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 const Instagram = ({ className }: { className?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
+    width="20"
+    height="20"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
@@ -26,8 +28,8 @@ const Instagram = ({ className }: { className?: string }) => (
 const Twitter = ({ className }: { className?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
+    width="20"
+    height="20"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
@@ -43,8 +45,8 @@ const Twitter = ({ className }: { className?: string }) => (
 const Youtube = ({ className }: { className?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
+    width="20"
+    height="20"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
@@ -61,8 +63,8 @@ const Youtube = ({ className }: { className?: string }) => (
 const Github = ({ className }: { className?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
+    width="20"
+    height="20"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
@@ -78,111 +80,140 @@ const Github = ({ className }: { className?: string }) => (
 
 const FOOTER_LINKS = {
   Products: [
-    { label: "Phone Cases", href: "/products?category=phone-cases" },
-    { label: "Chargers", href: "/products?category=chargers" },
-    { label: "Earbuds & Headphones", href: "/products?category=audio" },
-    { label: "Power Banks", href: "/products?category=power-banks" },
+    { label: "Cases & Protectors", href: "/products?category=phone-cases" },
+    { label: "GaN Fast Chargers", href: "/products?category=chargers" },
+    { label: "Acoustic Audio", href: "/products?category=audio" },
+    { label: "Mobile Power", href: "/products?category=power-banks" },
     { label: "Smartwatches", href: "/products?category=smartwatches" },
-    { label: "Gaming Accessories", href: "/products?category=gaming" },
+    { label: "Mechanical Gaming", href: "/products?category=gaming" }
   ],
   Company: [
     { label: "About Us", href: "/about" },
+    { label: "Engineering Blog", href: "/blog" },
     { label: "Careers", href: "/careers" },
-    { label: "Press", href: "/press" },
-    { label: "Blog", href: "/blog" },
+    { label: "Hardware Labs", href: "/labs" }
   ],
   Support: [
     { label: "Help Center", href: "/help" },
-    { label: "Track Order", href: "/dashboard" },
-    { label: "Returns & Refunds", href: "/returns" },
-    { label: "Warranty", href: "/warranty" },
-    { label: "Contact Us", href: "/contact" },
+    { label: "Track Console", href: "/dashboard" },
+    { label: "Warranty Claim", href: "/warranty" },
+    { label: "Returns", href: "/returns" },
+    { label: "Contact Us", href: "/contact" }
   ],
   Legal: [
     { label: "Privacy Policy", href: "/privacy" },
     { label: "Terms of Service", href: "/terms" },
-    { label: "Cookie Policy", href: "/cookies" },
-  ],
+    { label: "Patent Registry", href: "/patents" }
+  ]
 };
 
 const SOCIAL_LINKS = [
-  { Icon: Instagram, href: "#", label: "Instagram", color: "hover:text-pink-400" },
-  { Icon: Twitter, href: "#", label: "Twitter", color: "hover:text-sky-400" },
-  { Icon: Youtube, href: "#", label: "YouTube", color: "hover:text-red-400" },
-  { Icon: Github, href: "#", label: "GitHub", color: "hover:text-gray-200" },
+  { Icon: Instagram, href: "#", label: "Instagram", color: "hover:text-pink-400 hover:border-pink-500/20 hover:bg-pink-500/5" },
+  { Icon: Twitter, href: "#", label: "Twitter", color: "hover:text-sky-400 hover:border-sky-500/20 hover:bg-sky-500/5" },
+  { Icon: Youtube, href: "#", label: "YouTube", color: "hover:text-red-400 hover:border-red-500/20 hover:bg-red-500/5" },
+  { Icon: Github, href: "#", label: "GitHub", color: "hover:text-gray-100 hover:border-gray-500/20 hover:bg-gray-500/5" }
 ];
 
 export default function Footer() {
-  return (
-    <footer className="relative mt-20 border-t border-white/5">
-      {/* Background glow */}
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-500/30 to-transparent" />
-      <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
+  const [email, setEmail] = useState("");
+  const [subscribed, setSubscribed] = useState(false);
 
-      <div className="container px-4 sm:px-6 lg:px-8 pt-20 pb-12">
-        {/* Top Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 mb-12">
-          {/* Brand */}
-          <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2 mb-4 group">
-              <div className="relative w-9 h-9">
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-violet-600 rounded-xl rotate-12 group-hover:rotate-6 transition-transform duration-300" />
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    setSubscribed(true);
+    setEmail("");
+    setTimeout(() => setSubscribed(false), 4000);
+  };
+
+  return (
+    <footer className="relative bg-dark-base border-t border-white/5 overflow-hidden">
+      {/* Subtle top indicator border */}
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-violet-500/20 to-transparent" />
+      
+      {/* Huge ambient backing glow */}
+      <div className="absolute bottom-[-150px] left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-blue-500/5 rounded-full blur-[120px] pointer-events-none" />
+
+      <div className="container px-4 sm:px-6 lg:px-8 pt-24 pb-16 relative z-10">
+        
+        {/* Top Grid Area */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-20">
+          
+          {/* Brand Col */}
+          <div className="lg:col-span-4 space-y-8">
+            <Link href="/" className="flex items-center gap-2.5 group">
+              <div className="relative w-10 h-10">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-violet-600 rounded-xl rotate-12 group-hover:rotate-6 transition-transform duration-300 shadow-[0_4px_15px_rgba(0,82,255,0.3)]" />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <Zap className="w-5 h-5 text-white relative z-10" />
                 </div>
               </div>
-              <span className="font-display font-bold text-2xl tracking-tight gradient-text">TECH-BAAZAR</span>
+              <span className="font-display font-black text-2xl tracking-tight text-white uppercase">
+                Tech-Baazar
+              </span>
             </Link>
-            <p className="text-gray-400 text-sm leading-relaxed mb-6 max-w-xs">
-              India&apos;s most premium mobile accessories store. Engineered for the future, crafted for you.
+            
+            <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
+              We engineer premium mobile hardware accessories designed for performance, materials longevity, and structural design honesty.
             </p>
 
-            {/* Newsletter */}
-            <div className="mb-6">
-              <p className="text-sm font-medium text-gray-300 mb-3">Get exclusive deals</p>
+            {/* Newsletter input with glowing focus state and ripple validation */}
+            <form onSubmit={handleSubscribe} className="space-y-3 max-w-sm">
+              <p className="text-xs font-mono font-bold text-gray-500 uppercase tracking-widest">
+                Subscribe to Releases
+              </p>
+              
               <div className="flex gap-2">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="flex-1 px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/50 transition-colors"
-                  id="footer-email-input"
-                />
-                <button className="p-2.5 bg-blue-500 hover:bg-blue-600 rounded-xl transition-colors" aria-label="Subscribe" id="footer-subscribe-btn">
-                  <ArrowRight className="w-4 h-4 text-white" />
+                <div className="relative flex-1">
+                  <input
+                    type="email"
+                    placeholder="name@domain.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={subscribed}
+                    className="w-full px-4 py-3 bg-white/[0.02] border border-white/8 rounded-2xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/50 focus:bg-white/[0.04] transition-all disabled:opacity-50"
+                    id="footer-email-input"
+                  />
+                  <AnimatePresence>
+                    {subscribed && (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-green-400"
+                      >
+                        <Check className="w-4 h-4" />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+                <button
+                  type="submit"
+                  disabled={subscribed || !email}
+                  className="px-5 bg-white text-black hover:bg-gray-200 disabled:bg-gray-800 disabled:text-gray-600 rounded-2xl font-semibold text-xs flex items-center justify-center transition-all cursor-pointer active:scale-95"
+                  id="footer-subscribe-btn"
+                >
+                  {subscribed ? "Subscribed" : <ArrowRight className="w-4 h-4" />}
                 </button>
               </div>
-            </div>
-
-            {/* Contact */}
-            <div className="space-y-2 text-sm text-gray-400">
-              <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-blue-400 flex-shrink-0" />
-                <span>support@techbaazar.com</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-blue-400 flex-shrink-0" />
-                <span>+91 98765 43210</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-blue-400 flex-shrink-0" />
-                <span>Bengaluru, Karnataka, India</span>
-              </div>
-            </div>
+            </form>
           </div>
 
-          {/* Links */}
-          <div className="lg:col-span-3 grid grid-cols-2 sm:grid-cols-4 gap-8">
+          {/* Links Grid */}
+          <div className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-8">
             {Object.entries(FOOTER_LINKS).map(([title, links]) => (
-              <div key={title}>
-                <h3 className="font-semibold text-white text-sm mb-4">{title}</h3>
-                <ul className="space-y-2.5">
-                  {links.map(({ label, href }) => (
-                    <li key={href}>
+              <div key={title} className="space-y-5">
+                <h3 className="text-xs font-mono font-bold text-gray-500 uppercase tracking-widest">
+                  {title}
+                </h3>
+                <ul className="space-y-3">
+                  {links.map((link) => (
+                    <li key={link.href}>
                       <Link
-                        href={href}
-                        className="text-sm text-gray-400 hover:text-white transition-colors"
+                        href={link.href}
+                        className="text-sm text-gray-400 hover:text-white transition-colors duration-200 block font-medium"
                       >
-                        {label}
+                        {link.label}
                       </Link>
                     </li>
                   ))}
@@ -190,43 +221,51 @@ export default function Footer() {
               </div>
             ))}
           </div>
+
         </div>
 
-        {/* Bottom Section */}
-        <div className="border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-gray-500">
-            © {new Date().getFullYear()} TECH-BAAZAR. All rights reserved. Made with ❤️ in India.
-          </p>
-
-          {/* Social Links */}
-          <div className="flex items-center gap-3">
-            {SOCIAL_LINKS.map(({ Icon, href, label, color }) => (
-              <a
-                key={label}
-                href={href}
-                aria-label={label}
-                className={cn(
-                  "w-9 h-9 glass rounded-xl flex items-center justify-center text-gray-400 transition-all hover:scale-110",
-                  color
-                )}
-              >
-                <Icon className="w-4 h-4" />
-              </a>
-            ))}
+        {/* Brand Statement / Luxury tagline */}
+        <div className="border-t border-white/5 pt-12 pb-8 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
+          
+          <div className="space-y-2">
+            <p className="text-xs text-gray-500 font-semibold tracking-widest uppercase">
+              Tech-Baazar Design Labs
+            </p>
+            <p className="text-sm text-gray-400">
+              © {new Date().getFullYear()} TECH-BAAZAR. Engineered with precision. All rights reserved.
+            </p>
           </div>
 
-          {/* Payment badges */}
-          <div className="flex items-center gap-2 text-xs text-gray-500">
-            <span>Secured by</span>
-            <span className="px-2 py-1 bg-white/5 rounded-md font-medium text-gray-400">Stripe</span>
-            <span className="px-2 py-1 bg-white/5 rounded-md font-medium text-gray-400">SSL</span>
+          {/* Social media connections */}
+          <div className="flex gap-3">
+            {SOCIAL_LINKS.map((soc) => {
+              const SocialIcon = soc.Icon;
+              return (
+                <a
+                  key={soc.label}
+                  href={soc.href}
+                  aria-label={soc.label}
+                  className={cn(
+                    "w-10 h-10 rounded-xl glass border border-white/8 flex items-center justify-center text-gray-400 transition-all hover:scale-105",
+                    soc.color
+                  )}
+                >
+                  <SocialIcon className="w-5 h-5" />
+                </a>
+              );
+            })}
           </div>
+
+          {/* Logistics & Security */}
+          <div className="flex items-center gap-2.5 text-xs text-gray-500">
+            <span>Secured Checkout:</span>
+            <span className="px-2.5 py-1 bg-white/[0.03] border border-white/5 rounded-md font-mono font-semibold text-gray-400">Stripe</span>
+            <span className="px-2.5 py-1 bg-white/[0.03] border border-white/5 rounded-md font-mono font-semibold text-gray-400">SSL</span>
+          </div>
+
         </div>
+
       </div>
     </footer>
   );
-}
-
-function cn(...classes: (string | undefined | false)[]) {
-  return classes.filter(Boolean).join(" ");
 }

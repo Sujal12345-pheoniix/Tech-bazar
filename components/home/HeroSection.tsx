@@ -82,7 +82,7 @@ export function HeroSection() {
             transition={{ delay: 0.5, duration: 0.7 }}
             className="text-gray-400 text-lg sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed font-sans"
           >
-            Premium mobile accessories designed for performance, style, and the future.
+            Premium mobile accessories crafted for the future.
           </motion.p>
 
           {/* CTAs */}
@@ -101,7 +101,7 @@ export function HeroSection() {
 
             <MagneticButton className="group btn-premium-secondary px-8 py-4 text-lg gap-2 cursor-pointer w-full sm:w-auto flex items-center justify-center" onClick={() => setIsVideoOpen(true)} data-cursor="interactive">
               <Play className="w-4 h-4 text-blue-400 group-hover:scale-110 transition-transform" />
-              <span className="ml-2">Watch Experience</span>
+              <span className="ml-2">Experience Tech</span>
             </MagneticButton>
           </motion.div>
 

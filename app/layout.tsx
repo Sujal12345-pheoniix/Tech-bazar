@@ -85,7 +85,7 @@ export default async function RootLayout({
             enableSystem={false}
             disableTransitionOnChange={false}
           >
-            <div className="relative min-h-screen flex flex-col site-wrapper">
+            <div className="relative min-h-screen flex flex-col">
               <Header />
               <main className="flex-1">{children}</main>
               <Footer />
